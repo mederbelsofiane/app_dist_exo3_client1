@@ -1,7 +1,9 @@
 package app_dist_ex03_client;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.Socket;
 import java.net.URL;
 import java.sql.ResultSet;
@@ -52,13 +54,31 @@ public class LoginController implements Initializable {
             out.flush();
             out.writeUTF(password.getText());
             out.flush();
-            if (b == 1) {
+            InputStream in = serveur.getInputStream();
+
+            DataInputStream clientData = new DataInputStream(in);
+            String s = clientData.readUTF();
+            int k;
+            if (s.equals("ok")) {
+                UserOnline list = new UserOnline();
+                while ((s = clientData.readUTF()) != null) {
+                    if (s.equals("exit")) {
+                        break;
+                    }
+                    System.out.println("username " + s);
+                    k = clientData.readInt();
+                    System.out.println("id" + k);
+                    list.addUser(new User(k, s));
+
+                }
+
                 FXMLLoader load = new FXMLLoader();
                 load.setLocation(getClass().getResource("Index.fxml"));
                 load.load();
                 IndexController index = load.getController();
-                index.setClient(serveur);
 
+                index.setList_user_online(list);
+                index.setServeur(serveur);
                 Parent root = load.getRoot();
 
                 Scene scene = new Scene(root);

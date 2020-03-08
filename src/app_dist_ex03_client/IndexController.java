@@ -43,8 +43,9 @@ public class IndexController implements Initializable {
     public VBox vbox_users, vbox_message;
     @FXML
     private TextField message;
+    @FXML private Button file,Envoyer;
     ReceiveMessage receive_message;
-//    private connected connected;
+    UserOnline list_user_online;
     Socket serveur;
     Stage stage;
     DataOutputStream out;
@@ -71,6 +72,9 @@ public class IndexController implements Initializable {
             root.setAlignment(Pos.CENTER_RIGHT);
             vbox_message.getChildren().add(root);
             message.setText("");
+            User u = list_user_online.getUserID(UserOnline.getId_user_selected());
+            
+            u.list_message.add(root);
 
         } catch (IOException ex) {
             Logger.getLogger(IndexController.class.getName()).log(Level.SEVERE, null, ex);
@@ -178,24 +182,30 @@ public class IndexController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         UserInterfaceController.index = this;
-        UserInterfaceController.user_name_interface = client_name;
-        UserInterfaceController.vbox_message = vbox_message;
-//        try {
-//            serveur = new Socket("127.0.0.1", 3000);
-//            
-//        } catch (IOException ex) {
-//            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-        receive_message = new ReceiveMessage(vbox_message, "anis");
-        receive_message.setClient(serveur);
+ 
+    }
+    
+    public void setEtatMessage(boolean b) {
+        message.setDisable(b);
+        file.setDisable(b);
+        Envoyer.setDisable(b);
+    }
+
+    public void setServeur(Socket Serveur) {
+      //  list_user_online=new UserOnline(vbox_message,client_name);
+        this.serveur = Serveur;
+        receive_message = new ReceiveMessage(vbox_message,list_user_online);
+        receive_message.setClient(Serveur);
         receive_message.start();
     }
 
-    public void setClient(Socket client) {
-        this.serveur = client;
-        receive_message = new ReceiveMessage(vbox_message, "anis");
-        receive_message.setClient(client);
-        receive_message.start();
+    public void setList_user_online(UserOnline list_user_online) {
+        this.list_user_online = list_user_online;
+        this.list_user_online.setClient_name(client_name);
+        this.list_user_online.setVbox_users(vbox_users);
+        for(User u:list_user_online.getList_user_online()){
+            vbox_users.getChildren().add(u.getInterfaceController().root);
+        }
     }
 
     public void setStage(Stage stage) {

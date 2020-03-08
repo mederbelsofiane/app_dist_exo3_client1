@@ -9,7 +9,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#clicked" onMouseEntered="#mouseEntred" onMouseExited="#mouseExited" spacing="8.0" style="-fx-background-color: #12181E;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app_dist_ex03_serveur.UserInterfaceController">
+<HBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#clicked" onMouseEntered="#mouseEntred" onMouseExited="#mouseExited" spacing="8.0" style="-fx-background-color: #12181E;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app_dist_ex03_client.UserInterfaceController">
    <children>
       <Pane fx:id="pane" prefHeight="50.0" prefWidth="15.0" />
       <Circle fill="WHITE" radius="20.0" stroke="BLACK" strokeType="INSIDE">

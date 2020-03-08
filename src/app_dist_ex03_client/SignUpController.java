@@ -23,11 +23,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-/**
- * FXML Controller class
- *
- * @author meder
- */
 public class SignUpController implements Initializable {
 
     /**

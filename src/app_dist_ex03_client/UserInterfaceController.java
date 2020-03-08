@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package app_dist_ex03_client;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -24,8 +25,6 @@ public class UserInterfaceController implements Initializable {
     @FXML
     HBox root;
     private User user;
-    static public Label user_name_interface;
-    static public VBox vbox_message;
     static public IndexController index;
 
     @FXML
@@ -40,14 +39,18 @@ public class UserInterfaceController implements Initializable {
         root.setStyle(("-fx-background-color : #12181E"));
 
     }
-//
-//    @FXML
-//    public void clicked(MouseEvent e) {
-//        //user_name_interface.setText(user_name.getText());
-//        index.client_name.setText(user.getNom());
-//        UserOnline.setId_user_selected(user.getId());
-//        index.setEtatMessage(false);
-//    }
+
+    @FXML
+    public void clicked(MouseEvent e) {
+        //user_name_interface.setText(user_name.getText());
+        index.client_name.setText(user.getNom());
+        UserOnline.setId_user_selected(user.getId());
+        index.setEtatMessage(false);
+        index.vbox_message.getChildren().clear();
+        for (HBox i : user.list_message) {
+            index.vbox_message.getChildren().add(i);
+        }
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

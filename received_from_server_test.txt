@@ -1,0 +1,6 @@
+DELIMITER |
+CREATE TRIGGER before_insert_message After INSERT
+ON messages FOR EACH ROW
+BEGIN
+   UPDATE amis SET  `id_message`=NEW.id_message WHERE id_ami=NEW.id_ami;
+END |

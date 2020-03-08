@@ -17,6 +17,21 @@ public class UserOnline {
     private Label client_name;
     private static int id_user_selected=0;
 
+    public UserOnline() { list_user_online = new ArrayList<User>();
+    }
+
+    public void setVbox_users(VBox vbox_users) {
+        this.vbox_users = vbox_users;
+    }
+
+    public void setClient_name(Label client_name) {
+        this.client_name = client_name;
+    }
+
+    public ArrayList<User> getList_user_online() {
+        return list_user_online;
+    }
+    
     public UserOnline(VBox vbox_users, Label client_name) {
         list_user_online = new ArrayList<User>();
         this.vbox_users = vbox_users;
@@ -41,8 +56,7 @@ public class UserOnline {
                 }
 
             });
-            new Thread(u).start();
-
+            
         } catch (IOException ex) {
             Logger.getLogger(UserOnline.class.getName()).log(Level.SEVERE, null, ex);
         }
