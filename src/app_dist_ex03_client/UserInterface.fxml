@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#clicked" onMouseEntered="#mouseEntred" onMouseExited="#mouseExited" spacing="8.0" style="-fx-background-color: #12181E;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app_dist_ex03_serveur.UserInterfaceController">
+   <children>
+      <Pane fx:id="pane" prefHeight="50.0" prefWidth="15.0" />
+      <Circle fill="WHITE" radius="20.0" stroke="BLACK" strokeType="INSIDE">
+         <HBox.margin>
+            <Insets top="5.0" />
+         </HBox.margin>
+      </Circle>
+      <VBox prefWidth="125.0">
+         <children>
+            <Label fx:id="user_name" text="Label" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <BorderPane>
+               <center>
+                  <Label fx:id="message" text="Label" textFill="WHITE" BorderPane.alignment="CENTER_LEFT" />
+               </center>
+               <right>
+                  <Label text="Label" BorderPane.alignment="CENTER" />
+               </right>
+            </BorderPane>
+         </children>
+      </VBox>
+   </children>
+</HBox>
