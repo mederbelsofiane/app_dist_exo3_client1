@@ -31,24 +31,26 @@ public class User {
 
     private int id;
     private String nom;
-    private Socket socket;
+    private static Socket socket;
     private UserInterfaceController interfaceController;
     public static VBox vbox_message;
     public ArrayList<HBox> list_message;
-
+    private String message;
+    public static User personal_user;
+    
     public User(int id, String nom) {
         this.id = id;
         this.nom = nom;
         list_message = new ArrayList<HBox>();
     }
 
-    public User(int id, String nom, Socket socket) {
-        this(id, nom);
-        this.socket = socket;
+    public User(int id, String nom, String message) {
+        this(id,nom);
+        this.message = message;
     }
-
-    public User(int id, String nom, Socket socket, UserInterfaceController interfaceController) {
-        this(id, nom, socket);
+    
+    public User(int id, String nom, UserInterfaceController interfaceController) {
+        this(id, nom);
         this.interfaceController = interfaceController;
     }
 
@@ -73,11 +75,14 @@ public class User {
     }
 
     public void SendMessage(String s) {
-        try {
+       try {
 
             DataOutputStream out = new DataOutputStream(getSocket().getOutputStream());
             out.writeUTF("M");
-
+            out.writeInt(id);
+            if(id!=1){
+                out.writeInt(personal_user.getId());
+            }
             String cry = AES.encrypt(s, "anis");
             out.writeUTF(cry);
 
@@ -93,6 +98,7 @@ public class User {
             HBox root = (HBox) load.getRoot();
             root.setAlignment(Pos.CENTER_RIGHT);
             interfaceController.setMessage("You : " + s);
+            list_message.add(root);
             vbox_message.getChildren().add(root);
 
         } catch (IOException ex) {
@@ -108,4 +114,8 @@ public class User {
         return name.substring(lastIndexOf);
     }
 
+    public static void setSocket(Socket socket) {
+        User.socket = socket;
+    }
+    
 }

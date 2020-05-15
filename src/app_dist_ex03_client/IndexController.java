@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URL;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,37 +52,14 @@ public class IndexController implements Initializable {
     Socket serveur;
     Stage stage;
     DataOutputStream out;
+    User user;
 
     public void envoyer() {
-        try {
-
-            out = new DataOutputStream(serveur.getOutputStream());
-            out.writeUTF("M");
-
-            String cry = AES.encrypt(message.getText(), "anis");
-            out.writeUTF(cry);
-
-            FXMLLoader load = new FXMLLoader();
-            load.setLocation(getClass().getResource("Message.fxml"));
-            load.load();
-            Message_Controller Controller = load.getController();
-
-            Text t = new Text(message.getText());
-            t.setFill(Color.WHITE);
-            Controller.setText(t, "#3578E5");
-
-            HBox root = (HBox) load.getRoot();
-            root.setAlignment(Pos.CENTER_RIGHT);
-            vbox_message.getChildren().add(root);
-            message.setText("");
+        if (UserOnline.getId_user_selected() != 0) {
             User u = list_user_online.getUserID(UserOnline.getId_user_selected());
-            
-            u.list_message.add(root);
-
-        } catch (IOException ex) {
-            Logger.getLogger(IndexController.class.getName()).log(Level.SEVERE, null, ex);
+            u.SendMessage(message.getText());
+            message.setText("");
         }
-        //   }
     }
      @FXML
     public void envoyer_file(ActionEvent e) {
@@ -194,6 +174,7 @@ public class IndexController implements Initializable {
     public void setServeur(Socket Serveur) {
       //  list_user_online=new UserOnline(vbox_message,client_name);
         this.serveur = Serveur;
+         User.vbox_message=vbox_message;
         receive_message = new ReceiveMessage(vbox_message,list_user_online);
         receive_message.setClient(Serveur);
         receive_message.start();
@@ -203,6 +184,7 @@ public class IndexController implements Initializable {
         this.list_user_online = list_user_online;
         this.list_user_online.setClient_name(client_name);
         this.list_user_online.setVbox_users(vbox_users);
+       
         for(User u:list_user_online.getList_user_online()){
             vbox_users.getChildren().add(u.getInterfaceController().root);
         }
@@ -219,4 +201,31 @@ public class IndexController implements Initializable {
         }
         return name.substring(lastIndexOf);
     }
+
+    public void setUser(User user) {
+        this.user = user;
+        user_name.setText(user.getNom());
+        User.personal_user=user;
+         try {
+            Database db = new Database("localhost");
+            PreparedStatement sql = db.getCon().prepareStatement("select users.id_u,username ,message, send_date from users "
+                    + "join amis on users.id_u = amis.id_user1  join messages on amis.id_ami= messages.id_ami and amis.id_message=messages.id_message where id_user2=? "
+                    + "union select users.id_u,username ,message, send_date from users join amis on users.id_u = amis.id_user2  "
+                    + "join messages on amis.id_ami= messages.id_ami and amis.id_message=messages.id_message where id_user1=? order by send_date");
+            
+            sql.setInt(1, user.getId());
+            sql.setInt(2, user.getId());
+            ResultSet result = db.load_table(sql);
+           
+            while (result.next()) {
+                list_user_online.addUser(new User(result.getInt("id_u"),result.getString("username"),result.getString("message")));
+
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(IndexController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(IndexController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+     
 }

@@ -58,27 +58,32 @@ public class LoginController implements Initializable {
 
             DataInputStream clientData = new DataInputStream(in);
             String s = clientData.readUTF();
+            int id_user=clientData.readInt();
             int k;
+            User us;
             if (s.equals("ok")) {
                 UserOnline list = new UserOnline();
-                while ((s = clientData.readUTF()) != null) {
+                /*while ((k = clientData.readInt()) != null) {
                     if (s.equals("exit")) {
                         break;
                     }
                     System.out.println("username " + s);
-                    k = clientData.readInt();
+                    us=list.getUserID(k);
+                    
+                  /*  k = clientData.readInt();
                     System.out.println("id" + k);
                     list.addUser(new User(k, s));
 
-                }
+                }*/
 
                 FXMLLoader load = new FXMLLoader();
                 load.setLocation(getClass().getResource("Index.fxml"));
                 load.load();
                 IndexController index = load.getController();
-
+                
                 index.setList_user_online(list);
                 index.setServeur(serveur);
+                index.setUser(new User(id_user,username.getText()));
                 Parent root = load.getRoot();
 
                 Scene scene = new Scene(root);
@@ -126,8 +131,9 @@ public class LoginController implements Initializable {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        username.setText("test");
-        password.setText("test");
+        User.setSocket(serveur);
+        username.setText("test1");
+        password.setText("test1");
     }
 
     public void setStage(Stage stage) {

@@ -1,6 +1,10 @@
 package app_dist_ex03_client;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 public class Database {
 
@@ -11,15 +15,15 @@ public class Database {
 
     public Database(String ip) throws ClassNotFoundException, SQLException {
         this.ip = ip;
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        con = DriverManager.getConnection("jdbc:mysql://" + ip + ":3306/appdis?zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=UTC", "root", "basma123");
+       // Class.forName("com.mysql.cj.jdbc.Driver");
+       	Class.forName("org.mariadb.jdbc.Driver");
+        con = DriverManager.getConnection("jdbc:mysql://" + ip + ":3306/appdis?zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=UTC", "root", "");
     }
 
-    public ResultSet load_table(String sql) {
+    public ResultSet load_table(PreparedStatement sql) {
         try {
-            st = con.createStatement();
-            result = st.executeQuery(sql);
-            return result;
+            
+            return  sql.executeQuery();
         } catch (SQLException ex) {
             return null;
         }
@@ -52,4 +56,9 @@ public class Database {
         }
         return r;
     }
+
+    public Connection getCon() {
+        return con;
+    }
+    
 }
